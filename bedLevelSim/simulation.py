@@ -5,7 +5,8 @@ import threading as thread
 import numpy as np
 from mpl_toolkits import mplot3d
 from pathlib import Path
-from numpy.linalg import inv
+from numpy.linalg import inv 
+import math
 
 def calculation(dataFile):
     
@@ -22,7 +23,7 @@ def calculation(dataFile):
     zDataMeas = dataPoints[:,2]
 
     # printing the sample data
-    print(zDataMeas)
+    #print(zDataMeas)
 
 
     # creating a constant value for c as 1, since we dont know the current value of it and trying to calculate it
@@ -61,12 +62,27 @@ def calculation(dataFile):
 
 
     normalVector_graphed = np.array([-1*xVector[0], -1*xVector[1], 1])
+    normalVector_ref = np.array([0,0,1])
 
+
+    print(f"xVector[0] --> {xVector[0]}, xVector[1] -->  {xVector[1]}")
 
     axis.quiver(0,0,0, normalVector_graphed[0], normalVector_graphed[1], normalVector_graphed[2], color="orange",
     arrow_length_ratio=0.50, length=3.5)
 
-    axis.quiver(0,0,0, 0,0,1, color="blue", arrow_length_ratio=0.50, length=3.5)
+    axis.quiver(0,0,0, normalVector_ref[0],normalVector_ref[1], normalVector_ref[2],color="blue", arrow_length_ratio=0.50, length=3.5)
+
+    angleNumerator = np.dot(normalVector_graphed, normalVector_ref)
+    angleDenominator = math.sqrt((normalVector_graphed[0] ** 2) + (normalVector_graphed[1] ** 2) + (normalVector_graphed[2] ** 2))
+    
+    angle = np.arccos(angleNumerator / angleDenominator)
+
+    angleConvDegree = np.degrees(angle)
+    
+    print(f"Theta --> {angleConvDegree}")
+
+
+
 
     plt.show()
 
